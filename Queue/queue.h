@@ -8,7 +8,7 @@
                     {\
                        type* val;\
                        unsigned int val_size;\
-                       struct q_node_s* next;\
+                       struct q_node_##type_name* next;\
                     };\
                     \
                     struct q_queue_##type_name\
@@ -19,53 +19,53 @@
                     };
 
 
-#define Q_INIT_NODE(node,size) \
+#define Q_INIT_NODE(node_p,size) \
                         do{\
-                            node->val = NULL;\
-                            node->val_size = size;\
-                            node->next = NULL;\
+                            node_p->val = NULL;\
+                            node_p->val_size = size;\
+                            node_p->next = NULL;\
                         }while(0);
 
 
-#define Q_INIT_QUEUE(queue) \
+#define Q_INIT_QUEUE(queue_p) \
                         do{\
-                            queue->head = NULL;\
-                            queue->tail = NULL;\
-                            queue->length = 0;\
+                            queue_p->head = NULL;\
+                            queue_p->tail = NULL;\
+                            queue_p->length = 0;\
                         }while(0);
 
 
-#define Q_PUSH(queue,node) \
+#define Q_PUSH(queue_p,node_p) \
                         do{\
-                            if(queue->length == 0)\
+                            if(queue_p->length == 0)\
                             {\
-                                queue->head = node;\
-                                queue->tail = node;\
+                                queue_p->head = node_p;\
+                                queue_p->tail = node_p;\
                             }\
                             else\
                             {\
-                                queue->tail->next = node;\
-                                queue->tail = node;\
+                                queue_p->tail->next = node_p;\
+                                queue_p->tail = node_p;\
                             }\
-                            queue->length++;\
+                            queue_p->length++;\
                         }while(0);
 
 
-#define Q_POP(queue,node) \
+#define Q_POP(queue_p,node_p) \
                         do{\
-                            if(queue->length != 0)\
+                            if(queue_p->length != 0)\
                             {\
-                                node = queue->head;\ 
-                                if(queue->length != 1)\
+                                node_p = queue_p->head;\
+                                if(queue_p->length != 1)\
                                 {\
-                                    queue->head = queue->head->next;\
+                                    queue_p->head = queue_p->head->next;\
                                 }\
                                 else\
                                 {\
-                                    queue->head = NULL;\
-                                    queue->tail = NULL;\
+                                    queue_p->head = NULL;\
+                                    queue_p->tail = NULL;\
                                 }\
-                                queue->length--;\
+                                queue_p->length--;\
                             }\
                         }while(0);
 
