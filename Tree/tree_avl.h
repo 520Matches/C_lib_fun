@@ -16,24 +16,24 @@
     struct t_tree_avl_##type_name\
     {\
         struct t_node_##type_name* root;\
-        int t_node_compare(struct t_node_##type_name*,struct t_node_##type_name*);\
-    };
+        int (*t_node_compare)(struct t_node_##type_name*,struct t_node_##type_name*);\
+    };\
     \
     void t_LL(struct t_node_##type_name** t)\
     {\
         if(t != NULL)\
         {\
-            struct t_node_##type_name* parent = (*t)->parent;\
+            struct t_node_##type_name* p = (*t)->parent;\
             struct t_node_##type_name* tmpPtr = (*t)->left;\
             (*t)->left = tmpPtr->right;\
             tmpPtr->right = *t;\
-            if(parent->left == *t)\
+            if(p->left == *t)\
             {\
-                patent->left = tmpPtr;\
+                p->left = tmpPtr;\
             }\
-            else if(parent->right == *t)\
+            else if(p->right == *t)\
             {\
-                parent->right = *t;\
+                p->right = *t;\
             }\
             *t = tmpPtr;\
         }\
@@ -43,17 +43,17 @@
     {\
         if(t != NULL)\
         {\
-            struct t_node_##type_name* parent = (*t)->parent;\
+            struct t_node_##type_name* p = (*t)->parent;\
             struct t_node_##type_name* tmpPtr = (*t)->right;\
             (*t)->right = tmpPtr->left;\
             tmpPtr->left = *t;\
-            if(parent->left == *t)\
+            if(p->left == *t)\
             {\
-                patent->left = tmpPtr;\
+                p->left = tmpPtr;\
             }\
-            else if(parent->right == *t)\
+            else if(p->right == *t)\
             {\
-                parent->right = *t;\
+                p->right = *t;\
             }\
             *t = tmpPtr;\
         }\
@@ -88,7 +88,7 @@
     \
     void t_insert_node(struct t_tree_avl_##type_name* tree,struct t_node_##type_name** node,struct t_node_##type_name* t)\
     {\
-        if(tree->compare((*node),t) < 0)\
+        if(tree->t_node_compare((*node),t) < 0)\
         {\
             if((*node)->left != NULL)\
             {\
@@ -98,17 +98,17 @@
             {\
                 (*node)->left = t;\
                 struct t_node_##type_name* parent = (*node)->parent;\
-                if(tree->compare(*node,parent) < 0)\
+                if(tree->t_node_compare(*node,parent) < 0)\
                 {\
                     t_LL(&parent);\
                 }\
-                else if(tree->compare(*node,parent) > 0)\
+                else if(tree->t_node_compare(*node,parent) > 0)\
                 {\
                     t_RL(&parent);\
                 }\
             }\
         }\
-        else if(tree->compare((*node),t) > 0)\
+        else if(tree->t_node_compare((*node),t) > 0)\
         {\
             if((*node)->right != NULL)\
             {\
@@ -118,11 +118,11 @@
             {\
                 (*node)->right = t;\
                 struct t_node_##type_name* parent = (*node)->parent;\
-                if(tree->compare(*node,parent) < 0)\
+                if(tree->t_node_compare(*node,parent) < 0)\
                 {\
                     t_LR(&parent);\
                 }\
-                else if(tree->compare(*node,parent) > 0)\
+                else if(tree->t_node_compare(*node,parent) > 0)\
                 {\
                     t_RR(&parent);\
                 }\
@@ -156,11 +156,11 @@
     \
     struct t_node_##type_name* t_delete_node(struct t_tree_avl_##type_name* tree,struct t_node_##type_name** node,struct t_node_##type_name* t)\
     {\
-        if(tree->compare(*node,t) < 0)\
+        if(tree->t_node_compare(*node,t) < 0)\
         {\
             t_delete_node(tree,&((*node)->right),t);\
         }\
-        else if(tree->compare(*node,t) > 0)\
+        else if(tree->t_node_compare(*node,t) > 0)\
         {\
             t_delete_node(tree,&((*node)->left),t);\
         }\
@@ -169,7 +169,7 @@
             if((*node)->left == (*node)->right == NULL)\
             {\
                 struct t_node_##type_name* parent = (*node)->parent;\
-                if(tree->compare(*node,parent) < 0)\
+                if(tree->t_node_compare(*node,parent) < 0)\
                 {\
                     parent->left = NULL;\
                     if(get_node_height(parent) > 1)\
@@ -184,7 +184,7 @@
                         }\                      
                     }\
                 }\
-                else if(tree->compare(*node,parent) > 0)\
+                else if(tree->t_node_compare(*node,parent) > 0)\
                 {\
                     parent->right = NULL;\
                     if(get_node_height(parent) > 1)\
@@ -212,7 +212,7 @@
         }\
     }\
 
-#define T_TREE_INIT(tree_p,int (*compare)(struct t_node_##type_name*,struct t_node_##type_name*))\
+#define T_TREE_INIT(tree_p,compare)\
     do{\
         tree_p->root = NULL;\
         tree_p->t_node_compare = compare;\
