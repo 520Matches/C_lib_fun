@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stddef.h>
 #include <malloc.h>
 
@@ -30,7 +31,7 @@
         {\
             if(root->left != NULL)\
             {\
-                return select(value,root->value);\
+                return select_##type_name(value,root->left);\
             }\
             else\
             {\
@@ -39,9 +40,9 @@
         }\
         if(root->value < value)\
         {\
-            if(root->right)\
+            if(root->right != NULL)\
             {\
-                return select(value,root->right);\
+                return select_##type_name(value,root->right);\
             }\
             else\
             {\
@@ -161,14 +162,14 @@
 \
     void insert_##type_name(type value,struct AVLNode_##type_name* root)\
     {\
-        struct AVLNode_##type_name* node = select(value,root);\
+        struct AVLNode_##type_name* node = select_##type_name(value,root);\
         if(node == NULL)\
         {\
             Tree_##type_name.root = (struct AVLNode_##type_name*)malloc(sizeof(struct AVLNode_##type_name));\
             Tree_##type_name.root->value = value;\
             Tree_##type_name.root->left = Tree_##type_name.root->right = NULL;\
             Tree_##type_name.root->parent = NULL;\
-            Tree_##type_name.root->balance = NULL;\
+            Tree_##type_name.root->balance = 0;\
         }\
         else if(node->value != value)\
         {\
@@ -292,7 +293,45 @@
         return rightheight > leftheight ? (rightheight + 1) : (leftheight + 1);\
     }\
 \
-    void printTree_##type_name(struct AVLNode_##type_name* root)\
+    void preorderTree_##type_name(struct AVLNode_##type_name* root)\
     {\
-      \  
+        if(root == NULL)\
+        {\
+            return;\
+        }\
+        else\
+        {\
+            printf("%d	",root->value);\
+            preorderTree_##type_name(root->left);\
+            preorderTree_##type_name(root->right);\
+        }\
     }\
+\
+    void inorderTree_##type_name(struct AVLNode_##type_name* root)\
+    {\
+        if(root == NULL)\
+        {\
+            return;\
+        }\
+        else\
+        {\
+            inorderTree_##type_name(root->left);\
+            printf("%d	",root->value);\
+            inorderTree_##type_name(root->right);\
+        }\
+    }\
+\
+    void postorderTree_##type_name(struct AVLNode_##type_name* root)\
+    {\
+        if(root == NULL)\
+        {\
+            return;\
+        }\
+        else\
+        {\
+            postorderTree_##type_name(root->left);\
+            postorderTree_##type_name(root->right);\
+            printf("%d	",root->value);\
+        }\
+    }\
+\

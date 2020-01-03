@@ -38,14 +38,24 @@ TREE_INIT(int,int)
 
 int main(void)
 {
-    struct AVLNode_int a,b,c,d,e,f,g;
-    a.value = 1;
-    b.value = 2;
-    c.value = 3;
-    d.value = 4;
-    e.value = 5;
-    f.value = 6;
-    g.value = 7;
-    Tree_int.root = &a;
+	int arr[10] = {5,2,6,10,14,11,7,8,18,12};
+    struct AVLNode_int root;
+    Tree_int.root = &root;
+	root.balance = 0;
+	root.left = NULL;
+	root.right = NULL;
+	root.parent = NULL;
+	root.value = 1;
+	for(int i=0;i<10;i++)
+	{
+//		printf("%d\n",arr[i]);
+		insert_int(arr[i],Tree_int.root);
+	}
+	preorderTree_int(&root);
+	printf("\n");
+	inorderTree_int(&root);
+	printf("\n");
+	postorderTree_int(&root);
+	printf("\n");
     return 0;
 }
