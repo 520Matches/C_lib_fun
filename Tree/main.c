@@ -51,11 +51,11 @@ int main(void)
 //		printf("%d\n",arr[i]);
 		insert_int(arr[i],Tree_int.root);
 	}
-	preorderTree_int(&root);
+	preorderTree_int(Tree_int.root);
 	printf("\n");
-	inorderTree_int(&root);
+	inorderTree_int(Tree_int.root);
 	printf("\n");
-	postorderTree_int(&root);
+	postorderTree_int(Tree_int.root);
 	printf("\n");
     return 0;
 }
