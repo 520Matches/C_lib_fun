@@ -15,6 +15,10 @@
     struct AVLTree_##type_name\
     {\
         struct AVLNode_##type_name* root;\
+        int (*compare)(type v1,type v2);\
+        void (*preorderTree)(struct AVLNode_##type_name*);\
+        void (*inorderTree)(struct AVLNode_##type_name*);\
+        void (*postorderTree)(struct AVLNode_##type_name*);\
     }Tree_##type_name;\
 \
     struct AVLNode_##type_name* select_##type_name(type value,struct AVLNode_##type_name* root)\
@@ -27,7 +31,7 @@
         {\
             return root;\
         }\
-        if(root->value > value)\
+        if(Tree_##type_name.compare(root->value,value) > 0)\
         {\
             if(root->left != NULL)\
             {\
@@ -38,7 +42,7 @@
                 return root;\
             }\
         }\
-        if(root->value < value)\
+        if(Tree_##type_name.compare(root->value,value) < 0)\
         {\
             if(root->right != NULL)\
             {\
@@ -173,7 +177,7 @@
         }\
         else if(node->value != value)\
         {\
-            if(node->value > value)\
+            if(Tree_##type_name.compare(node->value,value) > 0)\
             {\
                 node->left = (struct AVLNode_##type_name*)malloc(sizeof(struct AVLNode_##type_name));\
                 node->left->value = value;\
@@ -182,7 +186,7 @@
                 node->left->balance = 0;\
                 rebalance_##type_name(node);\
             }\
-            else if(node->value < value)\
+            else if(Tree_##type_name.compare(node->value,value) < 0)\
             {\
                 node->right = (struct AVLNode_##type_name*)malloc(sizeof(struct AVLNode_##type_name));\
                 node->right->value = value;\
@@ -271,7 +275,7 @@
         struct AVLNode_##type_name* node = select_##type_name(value,root);\
         if(node->value == value)\
         {\
-            if((node->left != NULL) && (node->right))\
+            if((node->left != NULL) && (node->right != NULL))\
             {\
                 del_node_has2child_##type_name(node);\
             }\
@@ -292,6 +296,7 @@
         int leftheight = height_##type_name(a->left);\
         return rightheight > leftheight ? (rightheight + 1) : (leftheight + 1);\
     }\
+/*
 \
     void preorderTree_##type_name(struct AVLNode_##type_name* root)\
     {\
@@ -335,3 +340,4 @@
         }\
     }\
 \
+*/

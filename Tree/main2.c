@@ -1,7 +1,26 @@
 #include <stdio.h>
-#include "tree_avl.h"
+#include "tree_avl2.h"
 
+
+int compare(int v1,int v2)
+{
+    int ret = 0;
+    if(v1 > v2)
+    {
+        ret = 1;
+    }
+    else if(v1 < v2)
+    {
+        ret = -1;
+    }
+    else
+    {
+        ret = 0;
+    }
+    return ret;
+}
 TREE_INIT(int,int)
+
     void preorderTree(struct AVLNode_int* root)
     {
         if(root == NULL)
@@ -45,6 +64,18 @@ TREE_INIT(int,int)
     }
 
 
+void printTree(void)
+{
+    printf("preorder traversal tree\n");
+	Tree_int.preorderTree(Tree_int.root);
+	printf("\n");
+    printf("inorder traversal tree\n");
+	Tree_int.inorderTree(Tree_int.root);
+	printf("\n");
+    printf("postorder traversal tree\n");
+	Tree_int.postorderTree(Tree_int.root);
+	printf("\n");
+}
 
 int main(void)
 {
@@ -54,6 +85,7 @@ int main(void)
 	Tree_int.preorderTree = preorderTree;
 	Tree_int.inorderTree = inorderTree;
 	Tree_int.postorderTree = postorderTree;
+    Tree_int.compare = compare;
 	root.balance = 0;
 	root.left = NULL;
 	root.right = NULL;
@@ -64,11 +96,8 @@ int main(void)
 		insert_int(arr[i],Tree_int.root);
 	}
     printf("root->value=%d\n",Tree_int.root->value);
-	Tree_int.preorderTree(Tree_int.root);
-	printf("\n");
-	Tree_int.inorderTree(Tree_int.root);
-	printf("\n");
-	Tree_int.postorderTree(Tree_int.root);
-	printf("\n");
+    printTree();
+    del_int(2,Tree_int.root);
+    printTree();
     return 0;
 }
