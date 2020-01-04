@@ -139,7 +139,7 @@
                 a = turnLeft_then_turnRight_##type_name(a);\
             }\
         }\
-        if(a->balance == a)\
+        if(a->balance == 2)\
         {\
             if(a->right->balance >= 0)\
             {\
