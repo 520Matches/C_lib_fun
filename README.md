@@ -1,3 +1,2 @@
 # C_lib_fun
-author:Match
-some funtions used by C
+Data structure written by macro，and you can define anany type
